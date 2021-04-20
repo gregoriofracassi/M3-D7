@@ -2,6 +2,8 @@ const textField = document.querySelector('.text-field')
 const selectedSearch = document.querySelector('.select-search')
 const btnByName = document.querySelector('.by-name')
 const container = document.querySelector('.list')
+let byName = 'desc'
+let recontructedArr = []
 
 window.onload  = async () => {
     const response = await fetch('https://jsonplaceholder.typicode.com/users')
@@ -30,9 +32,16 @@ const filterUsers = (users) => {
 
 const usersByName = (users) => {
     container.innerHTML = ''
-    const namesArr = users.map( user => user.name)
-    const orderedNames = namesArr.sort()
-    // console.log(orderedNames)
-    const recontructedArr = orderedNames.map( nam => 'a')
-    console.log(users.find(user => user.username === 'Bret'))
+    if (byName === 'desc') {
+        const namesArr = users.map( user => user.name)
+        const orderedNames = namesArr.sort()
+        // console.log(orderedNames)
+        recontructedArr = orderedNames.map( nam => users.find( user => user.name === nam))
+        byName = 'asc'
+        showAllusers(recontructedArr)
+    } else if (byName === 'asc') {
+        byName = 'desc'
+        let reconstCopy = [...recontructedArr]
+        showAllusers(reconstCopy.reverse())
+    }
 }
